@@ -40,6 +40,7 @@ graph TD
     E --> G[DataFlow Feed Handler]
     G --> H[Binance/Coinbase/Kraken WebSocket]
 ```
+---
 
 # 1. Clone the repository
 ```text 
@@ -50,17 +51,24 @@ clone https://github.com/omshreevinayak/miniexchange.git
 cd miniexchange
 ```
 
+---
+
 # 2. Start everything with one command
 ```text 
 ocker-compose up -d
 ```
+
+---
 
 # 3. Access the dashboard
 ```text 
 open http://localhost:3001
 ```
 
+---
+
 # 4. View API documentation
 ```text 
 open http://localhost:3000/api/docs
 ```
+---
