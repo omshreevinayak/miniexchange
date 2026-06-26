@@ -9,7 +9,7 @@
 
 ---
 
-## 🚀 What is MiniExchange?
+## <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Rocket.png" alt="Rocket" width="25" height="25" /> What is MiniExchange?
 
 MiniExchange is a **production-grade, low-latency trading engine** built from scratch in **C++20**. It is designed to process buy/sell orders with **microsecond latency** using lock-free data structures, custom memory pools, and epoll networking.
 
