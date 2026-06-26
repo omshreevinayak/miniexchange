@@ -9,7 +9,7 @@
 
 ---
 
-## ** <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Symbols/New%20Button.png" alt="New Button" width="25" height="25" /> Status:** 
+## <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Symbols/New%20Button.png" alt="New Button" width="25" height="25" /> Status: 
 **Early Development** — Core engine design in progress. First working version (order book + matching) expected by July 2026.
 
 ---
