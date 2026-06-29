@@ -1,0 +1,114 @@
+version: '3.8'
+
+services:
+  # --- CORE DATABASES ---
+  postgres:
+    build: ./postgres
+    container_name: miniexchange-postgres
+    environment:
+      POSTGRES_USER: trading
+      POSTGRES_PASSWORD: securepass
+      POSTGRES_DB: miniexchange
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - miniexchange-net
+
+  redis:
+    build: ./redis
+    container_name: miniexchange-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - miniexchange-net
+
+  # --- C++ CORE ENGINE ---
+  aeromatch:
+    build: ./aeromatch
+    container_name: aeromatch
+    ports:
+      - "8080:8080"   # REST API (C++)
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      DB_HOST: postgres
+      DB_USER: trading
+      DB_PASS: securepass
+      REDIS_HOST: redis
+    networks:
+      - miniexchange-net
+
+  # --- RUST WEBSOCKET GATEWAY (Replaces C++ WS) ---
+  rust-ws:
+    build: ./rust/websocket_gateway
+    container_name: rust-ws
+    ports:
+      - "8081:8081"   # WebSocket port
+    depends_on:
+      - aeromatch
+    networks:
+      - miniexchange-net
+
+  # --- GO ADMIN CLI / MONITORING ---
+  go-monitor:
+    build: ./go/monitoring_service
+    container_name: go-monitor
+    ports:
+      - "8082:8082"   # Health checks, metrics
+    depends_on:
+      - aeromatch
+      - postgres
+    networks:
+      - miniexchange-net
+
+  # --- BACKEND API (Node.js/Go) ---
+  backend:
+    build: ./backend
+    container_name: backend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - miniexchange-net
+
+  # --- FRONTEND ---
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    ports:
+      - "3001:3001"
+    depends_on:
+      - backend
+    networks:
+      - miniexchange-net
+
+  # --- MONITORING ---
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./deploy/monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - miniexchange-net
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3002:3000"
+    networks:
+      - miniexchange-net
+
+volumes:
+  postgres_data:
+
+networks:
+  miniexchange-net:
+    driver: bridge
